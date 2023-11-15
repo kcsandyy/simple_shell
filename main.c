@@ -1,7 +1,7 @@
 #include "shell.h"
 
 /**
- * newline - trims the newline character
+ * find_newline - trims the newline character
  * @str: The string
  * Return: the position of the newline character
  */
