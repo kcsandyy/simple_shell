@@ -1,8 +1,19 @@
-#include <stdio.h>
-#include <unistd.h>
-#include <stdlib.h>
-#include <string.h>
 #include "shell.h"
+
+/**
+ * newline - trims the newline character
+ * @str: The string
+ * Return: the position of the newline character
+ */
+
+size_t find_newline(const char *str)
+{
+	size_t i = 0;
+
+	while (str[i] != '\0' && str[i] != '\n')
+		i++;
+	return (i);
+}
 
 /**
  * main - Entry of my shell
@@ -11,27 +22,35 @@
 
 int main(void)
 {
-	char command[command_len];
+	char *command = NULL;
+	size_t command_len = 0, input, newline_index;
 
 	while (1)
 	{
-		printf("$ ");
+		_putchar('$');
+		_putchar(' ');
 
-		if (fgets(command, command_len, stdin) == NULL)
+		input = getline(&command, &command_len, stdin);
+		if (input == (size_t)(-1))
 		{
 			if (feof(stdin))
 			{
-				printf("\n");
-				exit(0);
+				_putchar('\n');
+				break;
 			}
 			else
 			{
 				perror("Error reading command");
-				exit(1);
+				free(command);
+				break;
 			}
 		}
-		command[strcspn(command, "\n")] = '\0';
+		newline_index = find_newline(command);
+		if (command[newline_index] == '\n')
+			command[newline_index] = '\0';
+
 		execute_cmd(command);
 	}
+	free(command);
 	return (0);
 }
