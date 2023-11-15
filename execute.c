@@ -10,15 +10,19 @@ void execute_external_cmd(char *cmd)
 {
 	pid_t pid;
 	int status;
+	char *args[2];
 
 	pid = fork();
 	if (pid == 0)
 	{
-		if (execlp(cmd, cmd, NULL) == -1)
+		args[0] = cmd;
+		args[1] = NULL;
+
+		if (execve(args[0], args, environ) == -1)
 		{
 			perror("Error");
+			exit(1);
 		}
-		exit(1);
 	}
 	else if (pid == -1)
 	{
