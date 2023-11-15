@@ -9,21 +9,23 @@
 
 void execute_cmd(char *name)
 {
+	char *dir, *args[2];
 	char **env = environ;
 
-	if (strcmp(name, "env") == 0)
+	if (_strcmp(name, "env") == 0)
 	{
 		while (*env)
 		{
-			printf("%s\n", *env);
+			_puts(*env);
 			env++;
 		}
 	}
-	else if (strcmp(name, "exit") == 0)
+	else if (_strcmp(name, "exit") == 0)
 		exit(0);
-	else if (strcmp(name, "cd") == 0)
+	else if (_strcmp(name, "cd") == 0)
 	{
-		if (chdir(name) == -1)
+		dir = name + 3;
+		if (chdir(dir) == -1)
 		{
 			perror("Error: Directory not found");
 			exit(1);
@@ -31,6 +33,9 @@ void execute_cmd(char *name)
 	}
 	else
 	{
-		execute_external_cmd(name);
+		args[0] = name;
+		args[1] = NULL;
+
+		execute_external_cmd(args[0]);
 	}
 }
